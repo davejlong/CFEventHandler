@@ -1,5 +1,5 @@
 ﻿<cfscript>
-	eventHandler = new eventHandler();
+	eventHandler = createObject('component','eventHandler-tag').init();
 	writeDump(var=getMetaData(eventHandler), expand=false, label='EventHandler Meta Data');
 	eventHandler.addListenersByCFC(cfcdotpath='eventListener');
 	writeDump(var=eventHandler.getEvents(), expand=false, label='Events');
