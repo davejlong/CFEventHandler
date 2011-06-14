@@ -1,35 +1,54 @@
-﻿component output="false" accessors="true" {
-	property name="eventType" type="string" required="true";
-	
-	public function init(string eventType="", struct formStruct={}, struct urlStruct={}) {
-		variables.values = {};
-		setValues(arguments.urlStruct);
-		setValues(arguments.formStruct);
-		setEventType(arguments.eventType);
-	}
-	
-	public function getValue(required string valueName) {
-		local.return = "";
-	
-		if (hasValue(arguments.valueName)) {
-			local.return = variables.values[arguments.valueName];
-		}
-		return local.return;
-	}
-	
-	public function getValues() {
-		return variables.values;
-	}
-	
-	public function hasValue(required string valueName) {
-		return structKeyExists(variables.values,arguments.valueName);
-	}
-	
-	public function setValue(required string key,required any value) {
-		variables.values[arguments.key] = arguments.value;   
-	}
-	
-	private function setValues(required struct values) {
-		structAppend(variables.values,arguments.values);   
-	}
-}
+﻿<cfcomponent output="false">
+	<cfproperty name="eventType" type="string" />
+
+	<cffunction name="init" access="public" returntype="void">
+		<cfargument name="eventType" type="string" required="false" />
+		<cfargument name="formStruct" type="struct" required="false" />
+		<cfargument name="urlStruct" type="struct" required="false" />
+		<cfscript>
+			Variables.values = structNew();
+			setValues(Arguments.urlStruct);
+			setValues(Arguments.formStruct);
+			setEventType(Argumetns.eventType);
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="getValue" access="public" returntype="any">
+		<cfargument name="valuename" type="string" required="true" />
+		<cfset var value = '' />
+		<cfif hasValue(Arguments.valueName)>
+			<cfset value = Variables.values[Arguments.valueName] />
+		</cfif>
+		<cfreturn value />
+	</cffunction>
+
+	<cffunction name="getValues" access="public" returntype="struct">
+		<cfreturn Variables.values />
+	</cffunction>
+
+	<cffunction name="hasValue" access="public" returntype="boolean">
+		<cfargument name="valuename" type="string" required="true" />
+		<cfreturn structKeyExists(Variables.values, Arguments.valueName) />
+	</cffunction>
+
+	<cffunction name="setValue" access="public" returntype="void">
+		<cfargument name="key" type="string" required="false" />
+		<cfargument name="value" type="any" required="true" />
+		<cfset Variables.values[Arguments.key] = Arguments.value />
+	</cffunction>
+
+	<cffunction name="setValues" access="public" returntype="void">
+		<cfargument name="values" type="struct" required="true" />
+		<cfset structAppend(Variables.values, Arguments.values) />
+	</cffunction>	
+
+	<cffunction name="getEventType" access="public" output="false" returntype="string">
+		<cfreturn eventType />
+	</cffunction>
+
+	<cffunction name="setEventType" access="public" output="false" returntype="void">
+		<cfargument name="argEventType" type="string" required="true" />
+		<cfset eventType=argEventType />
+	</cffunction>
+
+</cfcomponent>
